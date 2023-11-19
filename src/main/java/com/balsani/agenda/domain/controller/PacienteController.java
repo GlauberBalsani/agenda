@@ -32,10 +32,11 @@ public class PacienteController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Paciente> getById(@PathVariable Long id) {
         Optional<Paciente> byId = pacienteService.findById(id);
-        if (byId.isPresent()) {
+        if (!byId.isPresent()) {
+
             return ResponseEntity.notFound().build();
         }
 
@@ -49,7 +50,7 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.OK).body(save);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> delet(@PathVariable Long id) {
         pacienteService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
