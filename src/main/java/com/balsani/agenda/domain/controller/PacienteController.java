@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("paciente")
@@ -30,4 +31,16 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.OK).body(all);
 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Paciente> getById(@PathVariable Long id) {
+        Optional<Paciente> byId = pacienteService.findById(id);
+        if (byId.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Paciente paciente = byId.get();
+        return ResponseEntity.status(HttpStatus.OK).body(paciente);
+    }
+
 }
