@@ -30,7 +30,7 @@ public class PacienteService {
         }
 
         if (existeCpf) {
-            throw new BusinessException("Cpf já existe");
+            throw new BusinessException("Cpf jáá existe");
         }
 
         return pacienteRepository.save(paciente);

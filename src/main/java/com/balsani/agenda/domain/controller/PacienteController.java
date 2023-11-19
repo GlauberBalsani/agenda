@@ -1,6 +1,9 @@
 package com.balsani.agenda.domain.controller;
 
 import com.balsani.agenda.domain.model.Paciente;
+import com.balsani.agenda.domain.model.dto.PacienteRequestDTO;
+import com.balsani.agenda.domain.model.dto.mapper.PacienteMapper;
+import com.balsani.agenda.domain.model.dto.PacienteResponseDTO;
 import com.balsani.agenda.domain.service.PacienteService;
 
 import org.springframework.http.HttpStatus;
@@ -20,9 +23,11 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Paciente> save(@RequestBody Paciente paciente) {
-        Paciente save = pacienteService.save(paciente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(save);
+    public ResponseEntity<PacienteResponseDTO> save(@RequestBody PacienteRequestDTO pacienteRequestDTO) {
+        Paciente paciente = PacienteMapper.toEntity(pacienteRequestDTO);
+        Paciente bodyPaciente = pacienteService.save(paciente);
+        PacienteResponseDTO dto = PacienteMapper.toPacienteResponse(bodyPaciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping
