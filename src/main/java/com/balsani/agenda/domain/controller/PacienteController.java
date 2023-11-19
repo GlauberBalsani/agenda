@@ -1,9 +1,9 @@
 package com.balsani.agenda.domain.controller;
 
 import com.balsani.agenda.domain.model.Paciente;
-import com.balsani.agenda.domain.model.dto.PacienteRequestDTO;
+import com.balsani.agenda.domain.model.dto.PacienteRequest;
 import com.balsani.agenda.domain.model.dto.mapper.PacienteMapper;
-import com.balsani.agenda.domain.model.dto.PacienteResponseDTO;
+import com.balsani.agenda.domain.model.dto.PacienteResponse;
 import com.balsani.agenda.domain.service.PacienteService;
 
 import org.springframework.http.HttpStatus;
@@ -23,36 +23,38 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<PacienteResponseDTO> save(@RequestBody PacienteRequestDTO pacienteRequestDTO) {
-        Paciente paciente = PacienteMapper.toEntity(pacienteRequestDTO);
+    public ResponseEntity<PacienteResponse> save(@RequestBody PacienteRequest pacienteRequest) {
+        Paciente paciente = PacienteMapper.toEntity(pacienteRequest);
         Paciente bodyPaciente = pacienteService.save(paciente);
-        PacienteResponseDTO dto = PacienteMapper.toPacienteResponse(bodyPaciente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(bodyPaciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<Paciente>> getAll() {
+    public ResponseEntity<List<PacienteResponse>> getAll() {
         List<Paciente> all = pacienteService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(all);
+        List<PacienteResponse> pacienteResponses = PacienteMapper.toPacienteResponseList(all);
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponses);
 
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Paciente> getById(@PathVariable Long id) {
+    public ResponseEntity<PacienteResponse> getById(@PathVariable Long id) {
         Optional<Paciente> byId = pacienteService.findById(id);
         if (!byId.isPresent()) {
 
             return ResponseEntity.notFound().build();
         }
 
-        Paciente paciente = byId.get();
-        return ResponseEntity.status(HttpStatus.OK).body(paciente);
+        return ResponseEntity.status(HttpStatus.OK).body(PacienteMapper.toPacienteResponse(byId.get()));
     }
 
     @PutMapping
-    public ResponseEntity<Paciente> update(@RequestBody Paciente paciente) {
-        Paciente save = pacienteService.save(paciente);
-        return ResponseEntity.status(HttpStatus.OK).body(save);
+    public ResponseEntity<PacienteResponse> update(@RequestBody PacienteRequest pacienteRequest) {
+        Paciente paciente = PacienteMapper.toEntity(pacienteRequest);
+        Paciente bodyPaciente = pacienteService.save(paciente);
+        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(bodyPaciente);
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
 
     @DeleteMapping("{id}")

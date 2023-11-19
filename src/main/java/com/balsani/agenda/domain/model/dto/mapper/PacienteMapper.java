@@ -1,14 +1,17 @@
 package com.balsani.agenda.domain.model.dto.mapper;
 
 import com.balsani.agenda.domain.model.Paciente;
-import com.balsani.agenda.domain.model.dto.PacienteDTO;
-import com.balsani.agenda.domain.model.dto.PacienteRequestDTO;
-import com.balsani.agenda.domain.model.dto.PacienteResponseDTO;
+import com.balsani.agenda.domain.model.dto.PacienteRequest;
+import com.balsani.agenda.domain.model.dto.PacienteResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PacienteMapper {
-    public static Paciente toEntity(PacienteRequestDTO pacienteDTO) {
+    public static Paciente toEntity(PacienteRequest pacienteDTO) {
         Paciente paciente = new Paciente();
         paciente.setNome(pacienteDTO.nome());
         paciente.setSobrenome(pacienteDTO.sobrenome());
@@ -18,12 +21,20 @@ public class PacienteMapper {
         return paciente;
     }
 
-    public static PacienteResponseDTO toPacienteResponse(Paciente paciente) {
-        return new PacienteResponseDTO(
+    public static PacienteResponse toPacienteResponse(Paciente paciente) {
+        return new PacienteResponse(
                 paciente.getNome(),
                 paciente.getSobrenome(),
-                paciente.getEmail(),
-                paciente.getCpf()
+                paciente.getEmail()
+                //paciente.getCpf()
         );
+    }
+
+    public static List<PacienteResponse> toPacienteResponseList(List<Paciente> pacientes) {
+        List<PacienteResponse> pacienteResponses = new ArrayList<>();
+        for(Paciente paciente : pacientes) {
+            pacienteResponses.add(toPacienteResponse(paciente));
+        }
+        return pacienteResponses;
     }
 }

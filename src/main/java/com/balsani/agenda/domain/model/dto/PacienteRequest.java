@@ -3,7 +3,7 @@ package com.balsani.agenda.domain.model.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record PacienteRequestDTO(
+public record PacienteRequest(
         @NotBlank
         String nome,
         @NotNull
