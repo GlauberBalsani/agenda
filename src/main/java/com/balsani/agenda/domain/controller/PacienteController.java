@@ -16,24 +16,26 @@ import java.util.Optional;
 @RestController
 @RequestMapping("paciente")
 public class PacienteController {
-    private PacienteService pacienteService;
+    private final PacienteService pacienteService;
+    private final PacienteMapper pacienteMapper;
 
-    public PacienteController(PacienteService pacienteService) {
+    public PacienteController(PacienteService pacienteService, PacienteMapper pacienteMapper) {
         this.pacienteService = pacienteService;
+        this.pacienteMapper = pacienteMapper;
     }
 
     @PostMapping
     public ResponseEntity<PacienteResponse> save(@RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = PacienteMapper.toEntity(pacienteRequest);
+        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
         Paciente bodyPaciente = pacienteService.save(paciente);
-        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(bodyPaciente);
+        PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
     }
 
     @GetMapping
     public ResponseEntity<List<PacienteResponse>> getAll() {
         List<Paciente> all = pacienteService.findAll();
-        List<PacienteResponse> pacienteResponses = PacienteMapper.toPacienteResponseList(all);
+        List<PacienteResponse> pacienteResponses = pacienteMapper.toPacienteResponseList(all);
         return ResponseEntity.status(HttpStatus.OK).body(pacienteResponses);
 
     }
@@ -46,14 +48,14 @@ public class PacienteController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(PacienteMapper.toPacienteResponse(byId.get()));
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteMapper.toPacienteResponse(byId.get()));
     }
 
     @PutMapping
     public ResponseEntity<PacienteResponse> update(@RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = PacienteMapper.toEntity(pacienteRequest);
+        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
         Paciente bodyPaciente = pacienteService.save(paciente);
-        PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(bodyPaciente);
+        PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
 
