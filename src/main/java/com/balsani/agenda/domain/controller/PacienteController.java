@@ -26,7 +26,7 @@ public class PacienteController {
 
     @PostMapping
     public ResponseEntity<PacienteResponse> save(@RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
+        Paciente paciente = pacienteMapper.toEntity(pacienteRequest);
         Paciente bodyPaciente = pacienteService.save(paciente);
         PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
@@ -43,24 +43,23 @@ public class PacienteController {
     @GetMapping("{id}")
     public ResponseEntity<PacienteResponse> getById(@PathVariable Long id) {
         Optional<Paciente> byId = pacienteService.findById(id);
-        if (!byId.isPresent()) {
-
+        if (byId.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(pacienteMapper.toPacienteResponse(byId.get()));
     }
 
-    @PutMapping
-    public ResponseEntity<PacienteResponse> update(@RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
-        Paciente bodyPaciente = pacienteService.save(paciente);
+    @PutMapping("{id}")
+    public ResponseEntity<PacienteResponse> update(@PathVariable Long id, @RequestBody PacienteRequest pacienteRequest) {
+        Paciente paciente = pacienteMapper.toEntity(pacienteRequest);
+        Paciente bodyPaciente = pacienteService.update(id, paciente);
         PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delet(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         pacienteService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

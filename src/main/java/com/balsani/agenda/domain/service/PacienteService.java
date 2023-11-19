@@ -47,4 +47,15 @@ public class PacienteService {
     public void deleteById(Long id) {
         pacienteRepository.deleteById(id);
     }
+
+    public Paciente update(Long id, Paciente paciente) {
+        Optional<Paciente> pacienteBody = pacienteRepository.findById(id);
+
+        if (pacienteBody.isEmpty()) {
+            throw new BusinessException("Paciente não cadastrado");
+        }
+        paciente.setId(id);
+
+        return save(paciente);
+    }
 }
