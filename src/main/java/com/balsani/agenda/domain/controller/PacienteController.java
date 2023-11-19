@@ -43,4 +43,16 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.OK).body(paciente);
     }
 
+    @PutMapping
+    public ResponseEntity<Paciente> update(@RequestBody Paciente paciente) {
+        Paciente save = pacienteService.save(paciente);
+        return ResponseEntity.status(HttpStatus.OK).body(save);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delet(@PathVariable Long id) {
+        pacienteService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
