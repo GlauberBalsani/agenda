@@ -1,7 +1,7 @@
 package com.balsani.agenda.domain.repository;
 
 import com.balsani.agenda.domain.model.Paciente;
-import org.apache.commons.text.translate.NumericEntityUnescaper;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,8 +2,8 @@ package com.balsani.agenda.domain.controller;
 
 import com.balsani.agenda.domain.model.Paciente;
 import com.balsani.agenda.domain.model.dto.PacienteRequest;
-import com.balsani.agenda.domain.model.dto.mapper.PacienteMapper;
 import com.balsani.agenda.domain.model.dto.PacienteResponse;
+import com.balsani.agenda.domain.model.dto.mapper.PacienteMapper;
 import com.balsani.agenda.domain.service.PacienteService;
 
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class PacienteController {
 
     @PostMapping
     public ResponseEntity<PacienteResponse> save(@RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = pacienteMapper.toEntity(pacienteRequest);
+        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
         Paciente bodyPaciente = pacienteService.save(paciente);
         PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
@@ -52,7 +52,7 @@ public class PacienteController {
 
     @PutMapping("{id}")
     public ResponseEntity<PacienteResponse> update(@PathVariable Long id, @RequestBody PacienteRequest pacienteRequest) {
-        Paciente paciente = pacienteMapper.toEntity(pacienteRequest);
+        Paciente paciente = pacienteMapper.toModel(pacienteRequest);
         Paciente bodyPaciente = pacienteService.update(id, paciente);
         PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(bodyPaciente);
         return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
