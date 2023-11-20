@@ -14,32 +14,39 @@ import java.util.Optional;
 
 @Service
 public class AgendaService {
-    private final AgendaRepository agendaRepository;
+    private final AgendaRepository repository;
     private final PacienteService pacienteService;
 
     public AgendaService (AgendaRepository agendaRepository, PacienteService pacienteService) {
-        this.agendaRepository = agendaRepository;
+        this.repository = agendaRepository;
         this.pacienteService = pacienteService;
 
 
     }
 
     public List<Agenda> findAll() {
-        return agendaRepository.findAll();
+        return repository.findAll();
     }
 
-    public Optional<Agenda> findById(Long id) {
-        return agendaRepository.findById(id);
+    public Optional<Agenda> buscarPorId(Long id) {
+        return repository.findById(id);
     }
+
 
     public Agenda salvar(Agenda agenda) {
-        Optional<Paciente> optPaciente = pacienteService.findById(agenda.getPaciente().getId());
+        Paciente paciente = agenda.getPaciente();
+
+        if (paciente == null || paciente.getId() == null) {
+            throw new BusinessException("Paciente não informado ou ID do paciente não encontrado na agenda");
+        }
+
+        Optional<Paciente> optPaciente = pacienteService.findById(paciente.getId());
 
         if (optPaciente.isEmpty()) {
             throw new BusinessException("Paciente não encontrado");
         }
 
-        Optional<Agenda> optHorario = agendaRepository.findByDataHorario(agenda.getDataHorario());
+        Optional<Agenda> optHorario = repository.findByDataHorario(agenda.getDataHorario());
 
         if (optHorario.isPresent()) {
             throw new BusinessException("Já existe agendamento para este horário");
@@ -48,6 +55,6 @@ public class AgendaService {
         agenda.setPaciente(optPaciente.get());
         agenda.setDataCriacao(LocalDateTime.now());
 
-        return agendaRepository.save(agenda);
+        return repository.save(agenda);
     }
 }

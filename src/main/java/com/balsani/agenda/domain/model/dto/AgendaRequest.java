@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class AgendaRequest {
     @NotBlank
     private String descricao;
+
     @NotNull
     @Future
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
